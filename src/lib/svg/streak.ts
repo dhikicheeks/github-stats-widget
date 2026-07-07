@@ -2,7 +2,7 @@ import type { StreakData } from '@/types';
 import { FALLBACK_STREAK } from '@/lib/fallback';
 
 const WIDTH = 480;
-const HEIGHT = 150;
+const HEIGHT = 175;
 
 function formatDate(iso: string): string {
   const d = new Date(iso);
@@ -11,45 +11,42 @@ function formatDate(iso: string): string {
 
 export function renderStreak(data: StreakData | null, username: string): string {
   const d = data ?? FALLBACK_STREAK;
-  const circumference = 2 * Math.PI * 32;
-  const pct = d.longestStreak > 0 ? Math.min(d.currentStreak / d.longestStreak, 1) : 0;
-  const dashOffset = circumference * (1 - pct);
 
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${WIDTH}" height="${HEIGHT}" viewBox="0 0 ${WIDTH} ${HEIGHT}">
   <defs>
     <clipPath id="clip-streak">
-      <rect width="${WIDTH}" height="${HEIGHT}" rx="12" ry="12"/>
+      <rect width="${WIDTH}" height="${HEIGHT}" rx="10" ry="10"/>
     </clipPath>
   </defs>
-  <rect width="${WIDTH}" height="${HEIGHT}" rx="12" ry="12" fill="#1a1b27" clip-path="url(#clip-streak)"/>
+  <g clip-path="url(#clip-streak)">
+    <rect width="${WIDTH}" height="${HEIGHT}" fill="#0d1117"/>
+    <rect width="${WIDTH}" height="30" fill="#161b22"/>
+    <circle cx="18" cy="15" r="5.5" fill="#ff5f57"/>
+    <circle cx="36" cy="15" r="5.5" fill="#ffbd2e"/>
+    <circle cx="54" cy="15" r="5.5" fill="#28c840"/>
+    <text x="72" y="20" fill="#6e7681" font-family="Consolas, Menlo, 'Courier New', monospace" font-size="11">@${username} — zsh</text>
+    <line x1="0" y1="30" x2="${WIDTH}" y2="30" stroke="#30363d" stroke-width="1"/>
 
-  <!-- title -->
-  <text x="16" y="22" fill="#e0e0f0" font-family="'Segoe UI', Ubuntu, Sans-Serif" font-size="13" font-weight="600">GitHub Streak</text>
-  <text x="${WIDTH - 8}" y="22" fill="#a0a0b0" font-family="'Segoe UI', Ubuntu, Sans-Serif" font-size="11" text-anchor="end">@${username}</text>
+    <line x1="155" y1="30" x2="155" y2="${HEIGHT}" stroke="#30363d" stroke-width="1" stroke-dasharray="3,3"/>
+    <line x1="325" y1="30" x2="325" y2="${HEIGHT}" stroke="#30363d" stroke-width="1" stroke-dasharray="3,3"/>
 
-  <!-- dividers -->
-  <line x1="155" y1="36" x2="155" y2="${HEIGHT - 12}" stroke="#2d2e3f" stroke-width="1"/>
-  <line x1="325" y1="36" x2="325" y2="${HEIGHT - 12}" stroke="#2d2e3f" stroke-width="1"/>
+    <text x="77" y="47" fill="#6e7681" font-family="Consolas, Menlo, 'Courier New', monospace" font-size="9" text-anchor="middle">$ cat total_commits</text>
+    <text x="240" y="47" fill="#6e7681" font-family="Consolas, Menlo, 'Courier New', monospace" font-size="9" text-anchor="middle">$ cat current_streak</text>
+    <text x="402" y="47" fill="#6e7681" font-family="Consolas, Menlo, 'Courier New', monospace" font-size="9" text-anchor="middle">$ cat longest_streak</text>
 
-  <!-- total contributions -->
-  <text x="77" y="68" fill="#e05cc0" font-family="'Segoe UI', Ubuntu, Sans-Serif" font-size="28" font-weight="700" text-anchor="middle">${d.totalContributions}</text>
-  <text x="77" y="88" fill="#a0a0b0" font-family="'Segoe UI', Ubuntu, Sans-Serif" font-size="11" text-anchor="middle">Total Contributions</text>
-  <text x="77" y="106" fill="#a0a0b0" font-family="'Segoe UI', Ubuntu, Sans-Serif" font-size="10" text-anchor="middle">${formatDate(d.firstContribution)}</text>
-  <text x="77" y="120" fill="#a0a0b0" font-family="'Segoe UI', Ubuntu, Sans-Serif" font-size="10" text-anchor="middle">– ${formatDate(d.lastContribution)}</text>
+    <text x="77" y="90" fill="#28c840" font-family="Consolas, Menlo, 'Courier New', monospace" font-size="28" font-weight="700" text-anchor="middle">${d.totalContributions}</text>
+    <text x="77" y="108" fill="#6e7681" font-family="Consolas, Menlo, 'Courier New', monospace" font-size="10" text-anchor="middle">${formatDate(d.firstContribution)}</text>
+    <text x="77" y="121" fill="#6e7681" font-family="Consolas, Menlo, 'Courier New', monospace" font-size="10" text-anchor="middle">– ${formatDate(d.lastContribution)}</text>
 
-  <!-- ring progress for current streak -->
-  <circle cx="240" cy="88" r="32" fill="none" stroke="#2d2e3f" stroke-width="5"/>
-  <circle cx="240" cy="88" r="32" fill="none" stroke="#e05cc0" stroke-width="5"
-    stroke-dasharray="${circumference.toFixed(2)}" stroke-dashoffset="${dashOffset.toFixed(2)}"
-    stroke-linecap="round" transform="rotate(-90 240 88)"/>
-  <text x="240" y="84" fill="#e05cc0" font-family="'Segoe UI', Ubuntu, Sans-Serif" font-size="22" font-weight="700" text-anchor="middle">${d.currentStreak}</text>
-  <text x="240" y="97" fill="#a0a0b0" font-family="'Segoe UI', Ubuntu, Sans-Serif" font-size="9" text-anchor="middle">weeks</text>
-  <text x="240" y="138" fill="#a0a0b0" font-family="'Segoe UI', Ubuntu, Sans-Serif" font-size="11" text-anchor="middle">Week Streak</text>
+    <circle cx="240" cy="97" r="32" fill="none" stroke="#30363d" stroke-width="5"
+      stroke-dasharray="8 4" transform="rotate(-90 240 97)"/>
+    <text x="240" y="97" fill="#28c840" font-family="Consolas, Menlo, 'Courier New', monospace" font-size="22" font-weight="700" text-anchor="middle">${d.currentStreak}</text>
+    <text x="240" y="110" fill="#6e7681" font-family="Consolas, Menlo, 'Courier New', monospace" font-size="9" text-anchor="middle">weeks</text>
+    <text x="240" y="162" fill="#6e7681" font-family="Consolas, Menlo, 'Courier New', monospace" font-size="10" text-anchor="middle">week streak</text>
 
-  <!-- longest streak -->
-  <text x="402" y="68" fill="#e05cc0" font-family="'Segoe UI', Ubuntu, Sans-Serif" font-size="28" font-weight="700" text-anchor="middle">${d.longestStreak}</text>
-  <text x="402" y="88" fill="#a0a0b0" font-family="'Segoe UI', Ubuntu, Sans-Serif" font-size="11" text-anchor="middle">Longest Streak</text>
-  <text x="402" y="106" fill="#a0a0b0" font-family="'Segoe UI', Ubuntu, Sans-Serif" font-size="10" text-anchor="middle">${formatDate(d.firstContribution)}</text>
-  <text x="402" y="120" fill="#a0a0b0" font-family="'Segoe UI', Ubuntu, Sans-Serif" font-size="10" text-anchor="middle">– ${formatDate(d.lastContribution)}</text>
+    <text x="402" y="90" fill="#28c840" font-family="Consolas, Menlo, 'Courier New', monospace" font-size="28" font-weight="700" text-anchor="middle">${d.longestStreak}</text>
+    <text x="402" y="108" fill="#6e7681" font-family="Consolas, Menlo, 'Courier New', monospace" font-size="10" text-anchor="middle">${formatDate(d.firstContribution)}</text>
+    <text x="402" y="121" fill="#6e7681" font-family="Consolas, Menlo, 'Courier New', monospace" font-size="10" text-anchor="middle">– ${formatDate(d.lastContribution)}</text>
+  </g>
 </svg>`;
 }

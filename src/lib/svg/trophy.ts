@@ -73,7 +73,7 @@ export function renderTrophy(data: TrophyData | null, username: string): string 
   const d = data ?? FALLBACK_TROPHY;
   const trophies = buildTrophies(d);
   const width = 470;
-  const height = 140;
+  const height = 143;
   const cardW = 80;
   const gap = 14;
   const startX = (width - (trophies.length * cardW + (trophies.length - 1) * gap)) / 2;
@@ -81,25 +81,33 @@ export function renderTrophy(data: TrophyData | null, username: string): string 
   const cards = trophies
     .map((t, i) => {
       const x = startX + i * (cardW + gap);
-      const tierLabel = t.tier || 'N/A';
+      const tierLabel = t.tier || '?';
+      const cup = `(${tierLabel})`;
       return `
-    <rect x="${x}" y="36" width="${cardW}" height="88" rx="8" fill="#0d0e1a" stroke="${t.color}" stroke-width="1.5" opacity="0.9"/>
-    <text x="${x + cardW / 2}" y="60" font-family="'Segoe UI', Ubuntu, Sans-Serif" font-size="18" text-anchor="middle">${t.icon}</text>
-    <text x="${x + cardW / 2}" y="78" fill="${t.color}" font-family="'Segoe UI', Ubuntu, Sans-Serif" font-size="13" font-weight="700" text-anchor="middle">${tierLabel}</text>
-    <text x="${x + cardW / 2}" y="94" fill="#a0a0b0" font-family="'Segoe UI', Ubuntu, Sans-Serif" font-size="9" text-anchor="middle">${t.label}</text>
-    <text x="${x + cardW / 2}" y="110" fill="#e0e0f0" font-family="'Segoe UI', Ubuntu, Sans-Serif" font-size="11" font-weight="600" text-anchor="middle">${t.value.toLocaleString()}</text>`;
+    <rect x="${x}" y="52" width="${cardW}" height="76" rx="6" fill="#161b22" stroke="${t.color}" stroke-width="1"/>
+    <text x="${x + cardW / 2}" y="75" fill="${t.color}" font-family="Consolas, Menlo, 'Courier New', monospace" font-size="14" font-weight="700" text-anchor="middle">${cup}</text>
+    <text x="${x + cardW / 2}" y="85" fill="${t.color}" font-family="Consolas, Menlo, 'Courier New', monospace" font-size="9" text-anchor="middle">─────</text>
+    <text x="${x + cardW / 2}" y="99" fill="#c9d1d9" font-family="Consolas, Menlo, 'Courier New', monospace" font-size="12" font-weight="600" text-anchor="middle">${t.value.toLocaleString()}</text>
+    <text x="${x + cardW / 2}" y="114" fill="#6e7681" font-family="Consolas, Menlo, 'Courier New', monospace" font-size="9" text-anchor="middle">${t.label.toLowerCase()}</text>`;
     })
     .join('');
 
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">
   <defs>
     <clipPath id="clip-trophy">
-      <rect width="${width}" height="${height}" rx="12" ry="12"/>
+      <rect width="${width}" height="${height}" rx="10" ry="10"/>
     </clipPath>
   </defs>
-  <rect width="${width}" height="${height}" rx="12" ry="12" fill="#1a1b27" clip-path="url(#clip-trophy)"/>
-  <text x="16" y="22" fill="#e0e0f0" font-family="'Segoe UI', Ubuntu, Sans-Serif" font-size="13" font-weight="600">GitHub Trophies</text>
-  <text x="${width - 8}" y="22" fill="#a0a0b0" font-family="'Segoe UI', Ubuntu, Sans-Serif" font-size="11" text-anchor="end">@${username}</text>
-  ${cards}
+  <g clip-path="url(#clip-trophy)">
+    <rect width="${width}" height="${height}" fill="#0d1117"/>
+    <rect width="${width}" height="30" fill="#161b22"/>
+    <circle cx="18" cy="15" r="5.5" fill="#ff5f57"/>
+    <circle cx="36" cy="15" r="5.5" fill="#ffbd2e"/>
+    <circle cx="54" cy="15" r="5.5" fill="#28c840"/>
+    <text x="72" y="20" fill="#6e7681" font-family="Consolas, Menlo, 'Courier New', monospace" font-size="11">@${username} — zsh</text>
+    <line x1="0" y1="30" x2="${width}" y2="30" stroke="#30363d" stroke-width="1"/>
+    <text x="16" y="44" fill="#6e7681" font-family="Consolas, Menlo, 'Courier New', monospace" font-size="9">$ cat achievements</text>
+    ${cards}
+  </g>
 </svg>`;
 }

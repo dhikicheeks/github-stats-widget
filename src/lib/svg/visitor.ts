@@ -1,36 +1,23 @@
 export function renderVisitor(count: number, label: string): string {
-  const labelWidth = Math.ceil(label.length * 6.5 + 16);
   const countStr = count.toLocaleString();
-  const countWidth = Math.ceil(countStr.length * 7.5 + 16);
-  const totalWidth = labelWidth + countWidth;
-  const height = 20;
+  const text = `> ${escapeXml(label)}: ${escapeXml(countStr)}`;
+  const totalWidth = Math.ceil(text.replace(/&[^;]+;/g, ' ').length * 7.5 + 24);
+  const height = 24;
 
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${totalWidth}" height="${height}" viewBox="0 0 ${totalWidth} ${height}">
   <defs>
-    <linearGradient id="grad-label" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#555" stop-opacity="0.1"/>
-      <stop offset="1" stop-color="#555" stop-opacity="0"/>
-    </linearGradient>
-    <linearGradient id="grad-count" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#0e75b6" stop-opacity="0.1"/>
-      <stop offset="1" stop-color="#0e75b6" stop-opacity="0"/>
-    </linearGradient>
     <clipPath id="clip-badge">
-      <rect width="${totalWidth}" height="${height}" rx="3" ry="3"/>
+      <rect width="${totalWidth}" height="${height}" rx="4" ry="4"/>
     </clipPath>
   </defs>
   <g clip-path="url(#clip-badge)">
-    <rect width="${labelWidth}" height="${height}" fill="#555"/>
-    <rect x="${labelWidth}" width="${countWidth}" height="${height}" fill="#0e75b6"/>
-    <rect width="${labelWidth}" height="${height}" fill="url(#grad-label)"/>
-    <rect x="${labelWidth}" width="${countWidth}" height="${height}" fill="url(#grad-count)"/>
+    <rect width="${totalWidth}" height="${height}" fill="#0d1117"/>
+    <line x1="0" y1="0" x2="${totalWidth}" y2="0" stroke="#30363d" stroke-width="1"/>
+    <line x1="0" y1="${height - 1}" x2="${totalWidth}" y2="${height - 1}" stroke="#30363d" stroke-width="1"/>
   </g>
-  <g fill="#fff" font-family="DejaVu Sans,Verdana,Geneva,Sans-Serif" font-size="11">
-    <text x="${labelWidth / 2}" y="15" fill="#010101" fill-opacity="0.3" text-anchor="middle">${escapeXml(label)}</text>
-    <text x="${labelWidth / 2}" y="14" text-anchor="middle">${escapeXml(label)}</text>
-    <text x="${labelWidth + countWidth / 2}" y="15" fill="#010101" fill-opacity="0.3" text-anchor="middle">${escapeXml(countStr)}</text>
-    <text x="${labelWidth + countWidth / 2}" y="14" text-anchor="middle">${escapeXml(countStr)}</text>
-  </g>
+  <text x="12" y="16" font-family="Consolas, Menlo, 'Courier New', monospace" font-size="11">
+    <tspan fill="#28c840">&gt;</tspan><tspan fill="#6e7681"> ${escapeXml(label)}: </tspan><tspan fill="#c9d1d9">${escapeXml(countStr)}</tspan>
+  </text>
 </svg>`;
 }
 
