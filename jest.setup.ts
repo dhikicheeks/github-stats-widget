@@ -9,7 +9,9 @@ jest.mock('@upstash/redis', () => ({
 
 jest.mock('@upstash/ratelimit', () => {
   const MockRatelimit = jest.fn().mockImplementation(() => ({
-    limit: jest.fn().mockResolvedValue({ success: true, remaining: 9, reset: Date.now() + 3600000 }),
+    limit: jest
+      .fn()
+      .mockResolvedValue({ success: true, remaining: 9, reset: Date.now() + 3600000 }),
   }));
   (MockRatelimit as unknown as Record<string, unknown>).slidingWindow = jest
     .fn()

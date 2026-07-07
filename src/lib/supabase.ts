@@ -25,11 +25,7 @@ export async function incrementVisitor(key: string): Promise<number> {
 
 export async function getVisitorCount(key: string): Promise<number> {
   try {
-    const { data, error } = await supabase
-      .from('visitors')
-      .select('count')
-      .eq('key', key)
-      .single();
+    const { data, error } = await supabase.from('visitors').select('count').eq('key', key).single();
     if (error) throw error;
     return (data as { count: number } | null)?.count ?? 0;
   } catch (err) {

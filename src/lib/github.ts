@@ -238,7 +238,9 @@ export async function fetchStreak(username: string): Promise<StreakData | null> 
       }
     }
 
-    const weekActivity = allWeeks.map((w) => w.contributionDays.some((d) => d.contributionCount > 0));
+    const weekActivity = allWeeks.map((w) =>
+      w.contributionDays.some((d) => d.contributionCount > 0)
+    );
 
     let longestStreak = 0;
     let streak = 0;
