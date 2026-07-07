@@ -6,7 +6,7 @@ function svgResponse(svg: string, extra?: Record<string, string>): NextResponse 
   return new NextResponse(svg, {
     headers: {
       'Content-Type': 'image/svg+xml',
-      'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400',
+      'Cache-Control': 'no-store, max-age=0',
       ...extra,
     },
   });
