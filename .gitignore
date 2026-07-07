@@ -44,6 +44,5 @@ next-env.d.ts
 CLAUDE.md
 .claude
 .claudeignore
-.github
 docs/
 package-lock.json
