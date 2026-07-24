@@ -126,7 +126,9 @@ export default function Home() {
           {/* description */}
           <div>
             <p style={{ fontSize: '13px', color: COLORS.muted }}>$ cat README.md</p>
-            <p style={{ fontSize: '13px', color: COLORS.text, marginTop: '6px', lineHeight: '1.7' }}>
+            <p
+              style={{ fontSize: '13px', color: COLORS.text, marginTop: '6px', lineHeight: '1.7' }}
+            >
               Self-hosted GitHub stats served as SVG via Next.js API routes.
               <br />
               Deploy to Vercel, embed in any README with an{' '}
