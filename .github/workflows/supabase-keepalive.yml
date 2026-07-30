@@ -1,0 +1,29 @@
+name: Supabase Keep-Alive
+
+on:
+  schedule:
+    # 4 odd times spread throughout the day (UTC)
+    # Each run has a 75% chance of actually pinging → random 1-4 hits/day
+    - cron: '17 1 * * *'
+    - cron: '43 7 * * *'
+    - cron: '11 13 * * *'
+    - cron: '52 19 * * *'
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Maybe ping (75% chance)
+        run: |
+          if [ $(( RANDOM % 4 )) -eq 0 ]; then
+            echo "Skipped this run (random)"
+            exit 0
+          fi
+          echo "Pinging Supabase via health endpoint..."
+          curl -sf "https://yoixo-gitstats.vercel.app/api/health" \
+            -H "User-Agent: github-actions/keepalive" \
+            --max-time 15 \
+            --retry 2 \
+            --retry-delay 5 \
+            | jq '.checks.supabase' 2>/dev/null || echo "Ping done (no jq output)"
